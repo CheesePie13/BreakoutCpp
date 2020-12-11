@@ -1,19 +1,24 @@
 #include <iostream>
-
-#include "game.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "game.hpp"
 
-void error_callback(int error, const char* description) {
+Game::Input game_input;
+
+void error_glfw_callback(int error, const char* description) {
 	std::cerr << "Error: " << description << std::endl;
 }
 
-int main() {
+void frame_buffer_size_glfw_callback(GLFWwindow* window, int width, int height) {
+	game_input.frame_buffer_width  = width;
+	game_input.frame_buffer_height = height;
+}
 
+int main() {
 	//
 	// GLFW Window setup
 	//
-	glfwSetErrorCallback(error_callback);
+	glfwSetErrorCallback(error_glfw_callback);
 
 	if (!glfwInit()) {
 		std::cout << "Failed to initialize glfw." << std::endl;
@@ -22,7 +27,7 @@ int main() {
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	GLFWwindow* window = glfwCreateWindow(640, 480, "My Title", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "BreakoutCpp", NULL, NULL);
 	if (!window) {
 		std::cout << "Failed to create window." << std::endl;
 		glfwTerminate();
@@ -31,26 +36,56 @@ int main() {
 
 	glfwMakeContextCurrent(window);
 
+	// Force Aspect Ratio to 16 by 9
+	glfwSetWindowAspectRatio(window, 16, 9);
+
+	// Set up frame size change callback
+	glfwSetFramebufferSizeCallback(window, frame_buffer_size_glfw_callback);
+
 	// Enable V-sync
 	glfwSwapInterval(1);
+
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+		std::cout << "Failed to initialize GLAD." << std::endl;
+		glfwTerminate();
+		return 1;
+	}
 
 	//
 	// Initialize Game
 	//
-	GameInput gameInput;
-	gameInput.deltaTime = 1.0 / 60.0;
-	gameInput.leftKeyPressed = false;
-	gameInput.rightKeyPressed = true;
+	game_input.delta_time        = 1.0 / 60.0;
+	game_input.left_key_pressed  = false;
+	game_input.right_key_pressed = true;
+	glfwGetFramebufferSize(window, &game_input.frame_buffer_width, &game_input.frame_buffer_height);
 
-	GameState* gameState = game_init(&gameInput);
+	Game::State* game_state = Game::init(&game_input);
+	if (game_state == NULL) {
+		std::cout << "Failed to initialize game." << std::endl;
+		glfwTerminate();
+		return -1;
+	}
 	
 	//
 	// Game Loop
 	//
+	float64 prev_frame_time;
+	float64 cur_frame_time;
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
-		game_render(&gameInput, gameState);
-		game_update(&gameInput, gameState);
+
+		// Time
+		prev_frame_time = cur_frame_time;
+		cur_frame_time = glfwGetTime();
+		game_input.frame_time = cur_frame_time;
+		game_input.delta_time = cur_frame_time - prev_frame_time;
+		
+		// Controls
+		game_input.left_key_pressed = glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS;
+		game_input.right_key_pressed = glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS;
+
+		Game::update(&game_input, game_state);
+		Game::render(&game_input, game_state);
 		glfwSwapBuffers(window);
 	}
 
