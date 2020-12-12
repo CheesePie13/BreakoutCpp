@@ -8,13 +8,8 @@
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
+			"problemMatcher": [],
+			"group": "build"
 		},
 		{
 			"type": "shell",
@@ -26,6 +21,26 @@
 			"problemMatcher": [
 				"$gcc"
 			],
+			"group": "build"
+		},
+		{
+			"type": "shell",
+			"label": "Build Mac Debug",
+			"command": "./mac-build-debug.sh",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"type": "shell",
+			"label": "Build Mac Release",
+			"command": "./mac-build-release.sh",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
 			"group": "build"
 		}
 	]

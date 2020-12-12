@@ -23,6 +23,18 @@
 					"ignoreFailures": true
 				}
 			]
-		}
+		},
+		{
+			"name": "(lldb) Launch Mac Debug",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/bin/mac-debug/BreakoutCppMacDebug",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "lldb"
+		},
 	]
 }

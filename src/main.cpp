@@ -2,6 +2,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "game.hpp"
+#include <unistd.h>
+
+#ifdef MACOS
+#include <mach-o/dyld.h>
+#endif
 
 Game::Input game_input;
 
@@ -15,6 +20,21 @@ void frame_buffer_size_glfw_callback(GLFWwindow* window, int width, int height) 
 }
 
 int main() {
+	std::cout << "Starting..." << std::endl;
+
+	// Set working directory to be the directory the executable is in.
+	#ifdef MACOS
+	uint32 exec_path_size = 1024;
+	char exec_path[exec_path_size];
+	
+	_NSGetExecutablePath(exec_path, &exec_path_size);
+	*strrchr(exec_path, '/') = '\0'; // Remove file name after last '/'
+	chdir(exec_path);
+	std::cout << "Working Directory: " << exec_path << std::endl;
+	#elif WINDOWS
+	// @todo: Set working directory on windows
+	#endif
+
 	//
 	// GLFW Window setup
 	//
@@ -27,6 +47,9 @@ int main() {
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	
 	GLFWwindow* window = glfwCreateWindow(1280, 720, "BreakoutCpp", NULL, NULL);
 	if (!window) {
 		std::cout << "Failed to create window." << std::endl;
