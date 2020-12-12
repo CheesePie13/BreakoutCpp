@@ -1,12 +1,15 @@
 #include <iostream>
+#include <unistd.h>
+
+#ifdef WINDOWS
+#include <Windows.h>
+#elif MACOS
+#include <mach-o/dyld.h>
+#endif
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "game.hpp"
-#include <unistd.h>
-
-#ifdef MACOS
-#include <mach-o/dyld.h>
-#endif
 
 Game::Input game_input;
 
@@ -23,17 +26,19 @@ int main() {
 	std::cout << "Starting..." << std::endl;
 
 	// Set working directory to be the directory the executable is in.
-	#ifdef MACOS
 	uint32 exec_path_size = 1024;
 	char exec_path[exec_path_size];
-	
+
+	#ifdef WINDOWS
+	GetModuleFileName(NULL, exec_path, exec_path_size);
+	*strrchr(exec_path, '\\') = '\0'; // Remove file name after last '/'
+	#elif MACOS
 	_NSGetExecutablePath(exec_path, &exec_path_size);
 	*strrchr(exec_path, '/') = '\0'; // Remove file name after last '/'
+	#endif
+
 	chdir(exec_path);
 	std::cout << "Working Directory: " << exec_path << std::endl;
-	#elif WINDOWS
-	// @todo: Set working directory on windows
-	#endif
 
 	//
 	// GLFW Window setup
