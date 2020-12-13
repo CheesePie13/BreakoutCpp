@@ -21,8 +21,6 @@ struct Game::State {
 };
 
 State* Game::init(const Input* input) {
-	std::cout << "Game Init" << std::endl;
-
 	//
 	// Initialize game state
 	//
@@ -85,6 +83,8 @@ State* Game::init(const Input* input) {
 
 	state->quad_program = quad_program;
 	state->quad_vao = vao;
+
+	std::cout << "Game Initialized" << std::endl;
 	return state;
 }
 

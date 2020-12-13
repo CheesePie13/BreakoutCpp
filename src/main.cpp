@@ -11,6 +11,8 @@
 #include <GLFW/glfw3.h>
 #include "game.hpp"
 
+#define VERSION "v0.1"
+
 Game::Input game_input;
 
 void error_glfw_callback(int error, const char* description) {
@@ -55,7 +57,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	
-	GLFWwindow* window = glfwCreateWindow(1280, 720, "BreakoutCpp", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "BreakoutCpp (" VERSION ")", NULL, NULL);
 	if (!window) {
 		std::cout << "Failed to create window." << std::endl;
 		glfwTerminate();
@@ -109,8 +111,11 @@ int main() {
 		game_input.delta_time = cur_frame_time - prev_frame_time;
 		
 		// Controls
-		game_input.left_key_pressed = glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS;
-		game_input.right_key_pressed = glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS;
+		game_input.left_key_pressed = glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS 
+				|| glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
+
+		game_input.right_key_pressed = glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS
+				|| glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
 
 		Game::update(&game_input, game_state);
 		Game::render(&game_input, game_state);
