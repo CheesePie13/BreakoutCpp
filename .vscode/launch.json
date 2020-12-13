@@ -28,7 +28,7 @@
 			"name": "(lldb) Launch Mac Debug",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/bin/mac-debug/BreakoutCppMacDebug",
+			"program": "${workspaceFolder}/bin/mac-debug/BreakoutCppMac_debug.app",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",

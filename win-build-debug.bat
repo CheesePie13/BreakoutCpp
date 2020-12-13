@@ -1,6 +1,6 @@
 @ECHO OFF 
 
-:: Set version
+:: Get version
 set /p version=<version.txt
 
 :: Clear or create bin\win-debug
