@@ -102,16 +102,15 @@ int main() {
 	//
 	// Game Loop
 	//
-	float64 prev_frame_time;
-	float64 cur_frame_time;
+	float64 prev_frame_time = glfwGetTime();
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 
 		// Time
-		prev_frame_time = cur_frame_time;
-		cur_frame_time = glfwGetTime();
+		float64 cur_frame_time = glfwGetTime();
 		game_input.frame_time = cur_frame_time;
 		game_input.delta_time = cur_frame_time - prev_frame_time;
+		prev_frame_time = cur_frame_time;
 		
 		// Controls
 		game_input.left_key_pressed = glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS 
