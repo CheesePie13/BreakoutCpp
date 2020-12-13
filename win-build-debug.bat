@@ -8,7 +8,7 @@ if exist bin\win-debug rmdir /S /Q bin\win-debug
 mkdir bin\win-debug
 
 :: Compile with mingw64
-g++ -o bin\win-debug\BreakoutCppWin_debug.exe src\*.cpp src\third-party\*.c -DWINDOWS -DVERSION=\"%version%-debug\" -Iinclude -Llib-win -lglfw3 -lgdi32 -Wall -O0 -g
+g++ -o bin\win-debug\BreakoutCppWin_debug.exe src\*.cpp third-party\src\*.c -DWINDOWS -DVERSION=\"%version%-debug\" -Ithird-party\include -Lthird-party\lib-win -lglfw3 -lgdi32 -Wall -O0 -g
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 :: Copy shaders to bin\win-debug
