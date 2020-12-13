@@ -1,6 +1,11 @@
 #include <iostream>
 #include <unistd.h>
 
+// External defines: 
+// - VERSION: String with version number (ex. "v1.0")
+// - WINDOWS: True if windows build
+// - MACOS: True if mac build
+
 #ifdef WINDOWS
 #include <Windows.h>
 #elif MACOS
@@ -10,8 +15,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "game.hpp"
-
-#define VERSION "v0.1"
 
 Game::Input game_input;
 

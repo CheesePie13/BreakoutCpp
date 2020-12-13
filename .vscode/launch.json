@@ -8,7 +8,7 @@
 			"name": "(gdb) Launch Windows Debug",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/bin/win-debug/BreakoutCppWinDebug.exe",
+			"program": "${workspaceFolder}/bin/win-debug/BreakoutCppWin_debug.exe",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}/bin/win-debug/",
