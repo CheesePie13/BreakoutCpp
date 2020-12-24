@@ -9,7 +9,10 @@
 				"cwd": "${workspaceFolder}"
 			},
 			"problemMatcher": [],
-			"group": "build"
+			"group": "build",
+			"presentation": {
+				"clear": true
+			}
 		},
 		{
 			"type": "shell",
@@ -21,7 +24,10 @@
 			"problemMatcher": [
 				"$gcc"
 			],
-			"group": "build"
+			"group": "build",
+			"presentation": {
+				"clear": true
+			}
 		},
 		{
 			"type": "shell",
@@ -31,7 +37,10 @@
 				"cwd": "${workspaceFolder}"
 			},
 			"problemMatcher": [],
-			"group": "build"
+			"group": "build",
+			"presentation": {
+				"clear": true
+			}
 		},
 		{
 			"type": "shell",
@@ -41,7 +50,10 @@
 				"cwd": "${workspaceFolder}"
 			},
 			"problemMatcher": [],
-			"group": "build"
+			"group": "build",
+			"presentation": {
+				"clear": true
+			}
 		}
 	]
 }

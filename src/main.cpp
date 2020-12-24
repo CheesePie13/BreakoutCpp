@@ -23,8 +23,8 @@ void error_glfw_callback(int error, const char* description) {
 }
 
 void frame_buffer_size_glfw_callback(GLFWwindow* window, int width, int height) {
-	game_input.frame_buffer_width  = width;
-	game_input.frame_buffer_height = height;
+	game_input.frame_buffer_size.x = width;
+	game_input.frame_buffer_size.y = height;
 }
 
 int main() {
@@ -90,10 +90,10 @@ int main() {
 	game_input.delta_time        = 1.0 / 60.0;
 	game_input.left_key_pressed  = false;
 	game_input.right_key_pressed = true;
-	glfwGetFramebufferSize(window, &game_input.frame_buffer_width, &game_input.frame_buffer_height);
+	glfwGetFramebufferSize(window, &game_input.frame_buffer_size.x, &game_input.frame_buffer_size.y);
 
-	Game::State* game_state = Game::init(&game_input);
-	if (game_state == NULL) {
+	Game::Data* game_data = Game::init(&game_input);
+	if (game_data == NULL) {
 		std::cout << "Failed to initialize game." << std::endl;
 		glfwTerminate();
 		return -1;
@@ -110,6 +110,10 @@ int main() {
 		float64 cur_frame_time = glfwGetTime();
 		game_input.frame_time = cur_frame_time;
 		game_input.delta_time = cur_frame_time - prev_frame_time;
+		if (game_input.delta_time > 1.0f) {
+			game_input.delta_time = 0.166666f;
+		}
+
 		prev_frame_time = cur_frame_time;
 		
 		// Controls
@@ -119,8 +123,8 @@ int main() {
 		game_input.right_key_pressed = glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS
 				|| glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
 
-		Game::update(&game_input, game_state);
-		Game::render(&game_input, game_state);
+		Game::update(&game_input, game_data);
+		Game::render(&game_input, game_data);
 		glfwSwapBuffers(window);
 	}
 

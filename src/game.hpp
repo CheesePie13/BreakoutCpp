@@ -1,6 +1,7 @@
 #pragma once
 
-#include "types.h"
+#include "types.hpp"
+#include "vector.hpp"
 
 /**
  * This file defines the interface between 
@@ -8,13 +9,12 @@
  */
 namespace Game {
 
-	// Forward declaration of Game::State (Platform layer should care about contents)
-	struct State;
+	// Forward declaration of Game::Data (Platform layer shouldn't care about contents)
+	struct Data;
 
 	// Filled out by platform layer every frame
 	struct Input {
-		int32 frame_buffer_width;
-		int32 frame_buffer_height;
+		Vec2Int frame_buffer_size;
 		
 		float64 delta_time;
 		float64 frame_time;
@@ -24,11 +24,11 @@ namespace Game {
 	};
 
 	// Initialize the game
-	State* init(const Input* input);
+	Data* init(const Input* input);
 
 	// Update the game logic for a frame
-	void update(const Input* input, State* state);
+	void update(const Input* input, Data* state);
 
 	// Render a frame
-	void render(const Input* input, State* state);
+	void render(const Input* input, Data* state);
 }

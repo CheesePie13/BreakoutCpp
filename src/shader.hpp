@@ -3,16 +3,17 @@
 #include <stdio.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "types.h"
+#include "types.hpp"
 
 void print_shader_logs(uint32 shader) {
 	int32 log_size = 0;
 	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &log_size);
 	
 	char* log = new char[log_size];
-	glGetShaderInfoLog(shader, sizeof(log_size), NULL, log);
+	glGetShaderInfoLog(shader, log_size, &log_size, log);
 	
 	std::cout << "Shader Compilation Error: " << log << std::endl;
+	delete log;
 }
 
 // Need to delete shader after linking with glDeleteShader()
