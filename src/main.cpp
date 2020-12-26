@@ -6,6 +6,10 @@
 // - WINDOWS: True if windows build
 // - MACOS: True if mac build
 
+#ifndef VERSION
+#define VERSION "Unknown Version"
+#endif
+
 #ifdef WINDOWS
 #include <Windows.h>
 #elif MACOS
@@ -16,6 +20,7 @@
 #include <GLFW/glfw3.h>
 #include "game.hpp"
 
+GLFWwindow* window;
 Game::Input game_input;
 
 void error_glfw_callback(int error, const char* description) {
@@ -25,6 +30,16 @@ void error_glfw_callback(int error, const char* description) {
 void frame_buffer_size_glfw_callback(GLFWwindow* window, int width, int height) {
 	game_input.frame_buffer_size.x = width;
 	game_input.frame_buffer_size.y = height;
+}
+
+void update_ui(int32 score, int32 lives, const char* info) {
+	char window_title[1024];
+	if (info == NULL) {
+		snprintf(window_title, sizeof(window_title), "BreakoutCpp (" VERSION ") - Score: %d, Lives: %d ", score, lives);
+	} else {
+		snprintf(window_title, sizeof(window_title), "BreakoutCpp (" VERSION ") - Score: %d, Lives: %d - %s", score, lives, info);
+	}
+	glfwSetWindowTitle(window, window_title);
 }
 
 int main() {
@@ -60,7 +75,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	
-	GLFWwindow* window = glfwCreateWindow(1280, 720, "BreakoutCpp (" VERSION ")", NULL, NULL);
+	window = glfwCreateWindow(1280, 720, "BreakoutCpp (" VERSION ")", NULL, NULL);
 	if (!window) {
 		std::cout << "Failed to create window." << std::endl;
 		glfwTerminate();
@@ -91,6 +106,7 @@ int main() {
 	game_input.left_key_pressed  = false;
 	game_input.right_key_pressed = true;
 	glfwGetFramebufferSize(window, &game_input.frame_buffer_size.x, &game_input.frame_buffer_size.y);
+	game_input.update_ui = update_ui;
 
 	Game::Data* game_data = Game::init(&game_input);
 	if (game_data == NULL) {
@@ -122,6 +138,9 @@ int main() {
 
 		game_input.right_key_pressed = glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS
 				|| glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
+
+		game_input.start_key_pressed_prev = game_input.start_key_pressed;
+		game_input.start_key_pressed = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
 
 		Game::update(&game_input, game_data);
 		Game::render(&game_input, game_data);

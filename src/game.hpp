@@ -21,6 +21,10 @@ namespace Game {
 		
 		bool left_key_pressed;
 		bool right_key_pressed;
+		bool start_key_pressed;
+		bool start_key_pressed_prev;
+
+		void (*update_ui)(int32 score, int32 lives, const char* info);
 	};
 
 	// Initialize the game

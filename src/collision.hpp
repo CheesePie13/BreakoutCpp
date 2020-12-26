@@ -145,7 +145,7 @@ bool moving_circle_to_retangle_collision_check(Vec2 p1, Vec2 p2, float32 radius,
 	
 	// Top-left corner
 	if (direction.x > 0.0f || direction.y < 0.0f) {
-		Vec2 corner_pos = Vec2{center.x - size.x * 0.5f, center.y + size.y * 0.5f};
+		Vec2 corner_pos = (Vec2){center.x - size.x * 0.5f, center.y + size.y * 0.5f};
 		if (raycast_circle(p1, direction, corner_pos, radius, &test_distance, &test_point, &test_normal) && test_distance < *distance) {
 			*distance = test_distance;
 			*point = test_point;
@@ -155,7 +155,7 @@ bool moving_circle_to_retangle_collision_check(Vec2 p1, Vec2 p2, float32 radius,
 	
 	// Bottom-right corner
 	if (direction.x < 0.0f || direction.y > 0.0f) {
-		Vec2 corner_pos = Vec2{center.x + size.x * 0.5f, center.y - size.y * 0.5f};
+		Vec2 corner_pos = (Vec2){center.x + size.x * 0.5f, center.y - size.y * 0.5f};
 		if (raycast_circle(p1, direction, corner_pos, radius, &test_distance, &test_point, &test_normal) && test_distance < *distance) {
 			*distance = test_distance;
 			*point = test_point;

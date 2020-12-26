@@ -54,7 +54,7 @@ bool raycast_horizontal_line(Vec2 ray_pos, Vec2 ray_dir, float32 y,
 	*distance = magnitude(delta);
 	point->x = ray_pos.x + delta.x;
 	point->y = y;
-	*normal = delta.y > 0 ? Vec2{0.0f, -1.0f} : Vec2{0.0f, 1.0f};
+	*normal = delta.y > 0 ? (Vec2){0.0f, -1.0f} : (Vec2){0.0f, 1.0f};
 	return true;
 }
 
@@ -88,7 +88,7 @@ bool raycast_vertical_line(Vec2 ray_pos, Vec2 ray_dir, float32 x,
 	point->x = x;
 	point->y = ray_pos.y + delta.y;
 	*distance = magnitude(delta);
-	*normal = delta.x > 0 ? Vec2{-1.0f, 0.0f} : Vec2{1.0f, 0.0f};
+	*normal = delta.x > 0 ? (Vec2){-1.0f, 0.0f} : (Vec2){1.0f, 0.0f};
 	return true;
 }
 

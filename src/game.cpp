@@ -13,9 +13,12 @@ const float32 PI = 3.14159265;
 
 const Vec2 world_size = {16, 9};
 
+const int     tile_grid_size_x   = 12;
+const int     tile_grid_size_y   = 3;
+const Vec2Int tile_grid_size     = {tile_grid_size_x, tile_grid_size_y};
+const int32   tile_count         = tile_grid_size_x * tile_grid_size_y;
+
 const Vec2    tile_size          = {1.0f, 0.5f};
-const Vec2Int tile_grid_size     = {2, 3};
-const int32   tile_count         = tile_grid_size.x * tile_grid_size.y;
 const Vec2    tile_grid_offset   = {0.0f, -1.0f};
 
 const float32 paddle_start_pos_x = 0.0f;
@@ -25,15 +28,14 @@ const float32 paddle_speed       = 6.0f;
 
 const Vec2    ball_start_pos     = {0.0f, 0.0f};
 const float32 ball_radius        = 0.2f;
-const float32 ball_base_speed    = 4.0f; // Ball speed on level 1
-const float32 ball_level_speed   = 1.0f; // Speed the ball increases by every level
+const float32 ball_base_speed    = 4.5f; // Ball speed on level 1
+const float32 ball_level_speed   = 0.5f; // Speed the ball increases by every level
 
 const float32 ball_paddle_max_rotation = 15.0f * (3.14159f / 180.0f);
 
 enum GameState {
-	START,
+	PAUSED,
 	PLAYING, 
-	ADVANCE_LEVEL,
 	GAME_OVER
 };
 
@@ -46,6 +48,7 @@ struct Game::Data {
 	GameState state;
 	int32     score;
 	int32     level;
+	int32     lives;
 
 	float32 paddle_pos_x;
 
@@ -68,9 +71,9 @@ void reset_ball_and_paddle(Data* data, float32 ball_speed) {
 }
 
 void reset_game(Data* data) {
-	data->state = START;
 	data->score = 0;
 	data->level = 1;
+	data->lives = 2;
 	reset_ball_and_paddle(data, ball_base_speed);
 	for (int i = 0; i < tile_count; i++) {
 		data->tiles[i].health = 1;
@@ -184,6 +187,7 @@ Data* Game::init(const Input* input) {
 	// Reset Game
 	//
 	reset_game(data);
+	data->state = PAUSED;
 
 	std::cout << "Game Initialized" << std::endl;
 	return data;
@@ -191,35 +195,24 @@ Data* Game::init(const Input* input) {
 
 void Game::update(const Input* input, Data* data) {
 
-	switch (data->state) {
-		case START:
-			// Check Game Start
-			{
-				if (input->left_key_pressed || input->right_key_pressed) {
-					data->state = PLAYING;
-				}
-			}
-			break;
-		case ADVANCE_LEVEL:
-			// Advance Level
-			{
-				data->level++;
-				reset_ball_and_paddle(data, ball_base_speed + ball_level_speed * (data->level - 1));
-				for (int i = 0; i < tile_count; i++) {
-					data->tiles[i].health = data->level;
-				}
-				
-				data->state = PLAYING;
-			}
-			break;
-		case GAME_OVER:
-			// Reset Game
+	if (data->state == PAUSED) {
+		if (input->start_key_pressed && !input->start_key_pressed_prev) {
+			data->state = PLAYING;
+		} else {
+			return;
+		}
+	} else if (data->state == GAME_OVER) {
+		if (input->start_key_pressed && !input->start_key_pressed_prev) {
 			reset_game(data);
-			break;
-	}
-
-	if (data->state != PLAYING) {
-		return;
+			data->state = PLAYING;
+		} else {
+			return;
+		}
+	} else if (data->state == PLAYING) {
+		if (input->start_key_pressed && !input->start_key_pressed_prev) {
+			data->state = PAUSED;
+			return;
+		}
 	}
 
 	// Paddle Movement
@@ -234,14 +227,14 @@ void Game::update(const Input* input, Data* data) {
 			direction += 1;
 		}
 
-		Vec2 delta = Vec2{direction * paddle_speed * (float32)input->delta_time, 0.0f};
+		Vec2 delta = (Vec2){direction * paddle_speed * (float32)input->delta_time, 0.0f};
 
 		// Prevent movement if we would collide with the ball
 		// @refactor: The check moves the ball in the opposite direction that the paddle is moving
 		// to check for the collision. Not ideal but works for now.
 		float32 distance;
 		Vec2 point, normal;
-		const Vec2 paddle_pos = Vec2{data->paddle_pos_x, paddle_pos_y};
+		const Vec2 paddle_pos = (Vec2){data->paddle_pos_x, paddle_pos_y};
 		if (!moving_circle_to_retangle_collision_check(data->ball_pos, data->ball_pos - delta, ball_radius, paddle_pos, paddle_size, 
 				&distance, &point, &normal))
 		{
@@ -308,7 +301,7 @@ void Game::update(const Input* input, Data* data) {
 
 			// Paddle collision
 			bool hit_paddle = false;
-			const Vec2 paddle_pos = Vec2{data->paddle_pos_x, paddle_pos_y};
+			const Vec2 paddle_pos = (Vec2){data->paddle_pos_x, paddle_pos_y};
 			if (moving_circle_to_retangle_collision_check(old_ball_pos, new_ball_pos, ball_radius, paddle_pos, paddle_size, 
 					&distance, &point, &normal) && distance < closest_distance) 
 			{
@@ -350,6 +343,7 @@ void Game::update(const Input* input, Data* data) {
 
 				if (hit_tile != NULL) {
 					hit_tile->health--;
+					data->score++;
 				}
 				
 				old_ball_pos = closest_point;
@@ -366,28 +360,53 @@ void Game::update(const Input* input, Data* data) {
 
 	// Check Advance Level
 	{
-		bool hasHealth = false;
+		bool has_health = false;
 		for (int i = 0; i < tile_count; i++) {
 			if (data->tiles[i].health > 0) {
-				hasHealth = true;
+				has_health = true;
 				break;
 			}
 		}
 
-		if (!hasHealth) {
-			data->state = ADVANCE_LEVEL;
+		if (!has_health) {
+			data->level++;
+			reset_ball_and_paddle(data, ball_base_speed + ball_level_speed * (data->level - 1));
+			for (int i = 0; i < tile_count; i++) {
+				data->tiles[i].health = data->level;
+			}
+			
+			data->state = PAUSED;
 		}
 	}
 
 	// Check Game Over
 	{
 		if (data->ball_pos.y < -world_size.y * 0.5f) {
-			data->state = GAME_OVER;
+			if (data->lives > 0) {
+				data->lives--;
+				reset_ball_and_paddle(data, ball_base_speed + ball_level_speed * (data->level - 1));
+				data->state = PAUSED;
+			} else {
+				data->state = GAME_OVER;
+			}
 		}
 	}
 }
 
 void Game::render(const Input* input, Data* data) {
+
+	// Update window title
+	switch (data->state) {
+		case PAUSED:
+			input->update_ui(data->score, data->lives, "Press Spacebar to Play");
+			break;
+		case PLAYING:
+			input->update_ui(data->score, data->lives, NULL);
+			break;
+		case GAME_OVER:
+			input->update_ui(data->score, data->lives, "Press Spacebar to Play Again");
+			break;
+	}
 
 	const float world_to_clip[9] = { 
 		2.0f / world_size.x, 0.0f, 0.0f,

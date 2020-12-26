@@ -97,4 +97,4 @@ inline Vec2 rotate(Vec2 v, float32 radians) {
 	result.x = v.x * cos(radians) - v.y * sin(radians);
 	result.y = v.x * sin(radians) + v.y * cos(radians);
 	return result;
-}
+} 

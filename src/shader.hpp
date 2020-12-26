@@ -13,7 +13,7 @@ void print_shader_logs(uint32 shader) {
 	glGetShaderInfoLog(shader, log_size, &log_size, log);
 	
 	std::cout << "Shader Compilation Error: " << log << std::endl;
-	delete log;
+	delete[] log;
 }
 
 // Need to delete shader after linking with glDeleteShader()
