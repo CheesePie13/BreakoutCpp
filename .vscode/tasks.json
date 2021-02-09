@@ -4,7 +4,7 @@
 		{
 			"type": "shell",
 			"label": "Build Windows Debug",
-			"command": "win-build-debug.bat",
+			"command": "./win-build-debug.bat",
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},
@@ -17,7 +17,7 @@
 		{
 			"type": "shell",
 			"label": "Build Windows Release",
-			"command": "win-build-release.bat",
+			"command": "./win-build-release.bat",
 			"options": {
 				"cwd": "${workspaceFolder}"
 			},

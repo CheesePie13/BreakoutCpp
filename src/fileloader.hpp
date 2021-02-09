@@ -2,7 +2,9 @@
 
 #include <iostream>
 
-// Load a file (remember to call free_file() after)
+/**
+ * Load a file (remember to call free_file() after)
+ */
 char* load_file(const char* path) {
 	FILE* file = fopen(path, "r");
 	if (file == NULL) {
@@ -23,7 +25,9 @@ char* load_file(const char* path) {
 	return file_data;
 }
 
-// Free a file loaded with load_file()
+/**
+ * Free a file loaded with load_file()
+ */
 void free_file(char* file) {
 	delete file;
 }

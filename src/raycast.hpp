@@ -1,7 +1,17 @@
 #include "types.hpp"
 #include "vector.hpp"
 
-// Find the intersection points between a circle and a ray
+/**
+ * Find the intersection points between a circle and a ray
+ * @param ray_pos Starting point of the ray
+ * @param ray_dir Direction of ray
+ * @param circle_pos Position of the circle
+ * @param circle_radius Radius of the circle
+ * @param distance Distance along the ray to the intersection
+ * @param point Position of the intersection
+ * @param normal Normal of the intersection
+ * @returns True if there was a intersection
+ */
 bool raycast_circle(Vec2 ray_pos, Vec2 ray_dir, Vec2 circle_pos, float32 circle_radius, 
 		float32* distance, Vec2* point, Vec2* normal)
 {
@@ -38,6 +48,16 @@ bool raycast_circle(Vec2 ray_pos, Vec2 ray_dir, Vec2 circle_pos, float32 circle_
 	return true;
 }
 
+/**
+ * Find the intersection points between a horizontal line and a ray
+ * @param ray_pos Starting point of the ray
+ * @param ray_dir Direction of ray
+ * @param y Y position of the horizontal line
+ * @param distance Distance along the ray to the intersection
+ * @param point Position of the intersection
+ * @param normal Normal of the intersection
+ * @returns True if there was a intersection
+ */
 bool raycast_horizontal_line(Vec2 ray_pos, Vec2 ray_dir, float32 y,
 		float32* distance, Vec2* point, Vec2* normal)
 {
@@ -54,10 +74,22 @@ bool raycast_horizontal_line(Vec2 ray_pos, Vec2 ray_dir, float32 y,
 	*distance = magnitude(delta);
 	point->x = ray_pos.x + delta.x;
 	point->y = y;
-	*normal = delta.y > 0 ? (Vec2){0.0f, -1.0f} : (Vec2){0.0f, 1.0f};
+	*normal = delta.y > 0 ? Vec2(0.0f, -1.0f) : Vec2(0.0f, 1.0f);
 	return true;
 }
 
+/**
+ * Find the intersection points between a horizontal line segment and a ray
+ * @param ray_pos Starting point of the ray
+ * @param ray_dir Direction of ray
+ * @param y Y position of the horizontal line segment
+ * @param x_min Min x value of the line segment
+ * @param x_max Max x value of the line segment
+ * @param distance Distance along the ray to the intersection
+ * @param point Position of the intersection
+ * @param normal Normal of the intersection
+ * @returns True if there was a intersection
+ */
 bool raycast_horizontal_line_segment(Vec2 ray_pos, Vec2 ray_dir, float32 y, float32 x_min, float32 x_max,
 		float32* distance, Vec2* point, Vec2* normal)
 {
@@ -72,6 +104,16 @@ bool raycast_horizontal_line_segment(Vec2 ray_pos, Vec2 ray_dir, float32 y, floa
 	return true;
 }
 
+/**
+ * Find the intersection points between a vertical line and a ray
+ * @param ray_pos Starting point of the ray
+ * @param ray_dir Direction of ray
+ * @param x X position of the verticl line
+ * @param distance Distance along the ray to the intersection
+ * @param point Position of the intersection
+ * @param normal Normal of the intersection
+ * @returns True if there was a intersection
+ */
 bool raycast_vertical_line(Vec2 ray_pos, Vec2 ray_dir, float32 x,
 		float32* distance, Vec2* point, Vec2* normal)
 {
@@ -88,10 +130,22 @@ bool raycast_vertical_line(Vec2 ray_pos, Vec2 ray_dir, float32 x,
 	point->x = x;
 	point->y = ray_pos.y + delta.y;
 	*distance = magnitude(delta);
-	*normal = delta.x > 0 ? (Vec2){-1.0f, 0.0f} : (Vec2){1.0f, 0.0f};
+	*normal = delta.x > 0 ? Vec2(-1.0f, 0.0f) : Vec2(1.0f, 0.0f);
 	return true;
 }
 
+/**
+ * Find the intersection points between a vertical line segment and a ray
+ * @param ray_pos Starting point of the ray
+ * @param ray_dir Direction of ray
+ * @param x X position of the vertical line segment
+ * @param y_min Min y value of the line segment
+ * @param y_max Max y value of the line segment
+ * @param distance Distance along the ray to the intersection
+ * @param point Position of the intersection
+ * @param normal Normal of the intersection
+ * @returns True if there was a intersection
+ */
 bool raycast_vertical_line_segment(Vec2 ray_pos, Vec2 ray_dir, float32 x, float32 y_min, float32 y_max,
 		float32* distance, Vec2* point, Vec2* normal)
 {

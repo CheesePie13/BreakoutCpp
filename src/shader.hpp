@@ -16,7 +16,10 @@ void print_shader_logs(uint32 shader) {
 	delete[] log;
 }
 
-// Need to delete shader after linking with glDeleteShader()
+/**
+ * Create a shader from the text.
+ * Note: Need to delete shader after linking with glDeleteShader()
+ */
 uint32 create_shader(char* shader_code, GLenum shader_type) {
 	uint32 shader = glCreateShader(shader_type);
 	glShaderSource(shader, 1, &shader_code, NULL);
@@ -33,6 +36,9 @@ uint32 create_shader(char* shader_code, GLenum shader_type) {
 	return 0;
 }
 
+/**
+ * Create a shader program from the text of a vertex and fragment shader.
+ */
 uint32 create_shader_program(char* vert_shader_code, char* frag_shader_code) {
 	uint32 vert_shader = create_shader(vert_shader_code, GL_VERTEX_SHADER);
 	if (vert_shader == 0) {

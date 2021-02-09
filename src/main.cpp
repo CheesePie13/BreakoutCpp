@@ -42,7 +42,11 @@ void update_ui(int32 score, int32 lives, const char* info) {
 	glfwSetWindowTitle(window, window_title);
 }
 
+/**
+ * Program entry point
+ */
 int main() {
+
 	std::cout << "Starting..." << std::endl;
 
 	// Set working directory to be the directory the executable is in.
@@ -126,6 +130,9 @@ int main() {
 		float64 cur_frame_time = glfwGetTime();
 		game_input.frame_time = cur_frame_time;
 		game_input.delta_time = cur_frame_time - prev_frame_time;
+
+		// If the frame took a really long time we are probably debugging, 
+		// so make the frame delta a reasonable value
 		if (game_input.delta_time > 1.0f) {
 			game_input.delta_time = 0.166666f;
 		}
@@ -142,6 +149,7 @@ int main() {
 		game_input.start_key_pressed_prev = game_input.start_key_pressed;
 		game_input.start_key_pressed = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
 
+		// Update and render the game
 		Game::update(&game_input, game_data);
 		Game::render(&game_input, game_data);
 		glfwSwapBuffers(window);

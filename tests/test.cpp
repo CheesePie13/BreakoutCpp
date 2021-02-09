@@ -78,13 +78,13 @@ int main() {
 	//
 	// raycast_circle()
 	//
-	test(&has_failed, "Raycast Circle Test 1", test_raycast_circle_hit((Vec2){-5.0f, 0.0f}, (Vec2){1.0f, 0.0f}, (Vec2){0.0f, 0.0f}, 1.0f, 
-			(Vec2){-1.0f, 0.0}, 4.0f, (Vec2){-1.0f, 0.0f}));
+	test(&has_failed, "Raycast Circle Test 1", test_raycast_circle_hit(Vec2(-5.0f, 0.0f), Vec2(1.0f, 0.0f), Vec2(0.0f, 0.0f), 1.0f, 
+			Vec2(-1.0f, 0.0), 4.0f, Vec2(-1.0f, 0.0f)));
 
-	test(&has_failed, "Raycast Circle Test 2", test_raycast_circle_hit((Vec2){3.0f, 10.0f}, (Vec2){0.0f, -1.0f}, (Vec2){0.0f, 0.0f}, 5.0f, 
-			(Vec2){3.0f, 4.0}, 6.0f, normalize((Vec2){3.0f, 4.0f})));
+	test(&has_failed, "Raycast Circle Test 2", test_raycast_circle_hit(Vec2(3.0f, 10.0f), Vec2(0.0f, -1.0f), Vec2(0.0f, 0.0f), 5.0f, 
+			Vec2(3.0f, 4.0), 6.0f, normalize(Vec2(3.0f, 4.0f))));
 
-	test(&has_failed, "Raycast Circle Test 3", test_raycast_circle_miss((Vec2){0.0f, 0.0f}, normalize((Vec2){1.0f, 1.0f}), (Vec2){-2.0f, -2.0f}, 1.0f));
+	test(&has_failed, "Raycast Circle Test 3", test_raycast_circle_miss(Vec2(0.0f, 0.0f), normalize(Vec2(1.0f, 1.0f)), Vec2(-2.0f, -2.0f), 1.0f));
 
 
 	if (has_failed) {

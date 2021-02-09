@@ -5,6 +5,17 @@
 #include "vector.hpp"
 #include "raycast.hpp"
 
+/**
+ * Check for a collision between a moving circle and a vertical line.
+ * @param p1 Start position of circle
+ * @param p2 End position of circle
+ * @param radius Radius of circle
+ * @param line_x_pos X postion of the vertical line
+ * @param distance Distance from p1 to the collision point
+ * @param point Position of the collision
+ * @param normal Normal of the collision
+ * @returns True if there was a collision
+ */
 bool moving_circle_to_vertical_line_collision_check(Vec2 p1, Vec2 p2, float32 radius, float32 line_x_pos, 
 		float32* distance, Vec2* point, Vec2* normal) 
 {
@@ -25,6 +36,17 @@ bool moving_circle_to_vertical_line_collision_check(Vec2 p1, Vec2 p2, float32 ra
 	return false;
 }
 
+/**
+ * Check for a collision between a moving circle and a horizontal line.
+ * @param p1 Start position of circle
+ * @param p2 End position of circle
+ * @param radius Radius of circle
+ * @param line_y_pos Y postion of the horizontal line
+ * @param distance Distance from p1 to the collision point
+ * @param point Position of the collision
+ * @param normal Normal of the collision
+ * @returns True if there was a collision
+ */
 bool moving_circle_to_horizontal_line_collision_check(Vec2 p1, Vec2 p2, float32 radius, float32 line_y_pos, 
 		float32* distance, Vec2* point, Vec2* normal) 
 {
@@ -45,9 +67,18 @@ bool moving_circle_to_horizontal_line_collision_check(Vec2 p1, Vec2 p2, float32 
 	return false;
 }
 
-// Quick check if there is a possible collision between a circle moving
-// from point p1 to point p2 and rectangle.
-// Can return false positives.
+/**
+ * Quick check if there is a possible collision 
+ * between a moving circle and rectangle.
+ * Can return false positives.
+ * 
+ * @param p1 Start position of circle
+ * @param p2 End position of circle
+ * @param radius Radius of circle
+ * @param center Center of the rectangle
+ * @param size Size of the rectangle
+ * @returns True if there might be a collision. False if there is definitely no collision.
+ */
 bool moving_circle_to_retangle_collision_quick_check(Vec2 p1, Vec2 p2, float32 radius, Vec2 center, Vec2 size) {
 	Vec2 max = center + (size * 0.5f) + Vec2_ONE * radius;
 	if ((p1.x > max.x && p2.x > max.x) ||(p1.y > max.y && p2.y > max.y)) {
@@ -62,7 +93,18 @@ bool moving_circle_to_retangle_collision_quick_check(Vec2 p1, Vec2 p2, float32 r
 	return true;
 }
 
-// Check for collision between an axis aligned rectangle and a moving circle
+/**
+ * Check for a collision between a moving circle and a rectangle.
+ * @param p1 Start position of circle
+ * @param p2 End position of circle
+ * @param radius Radius of circle
+ * @param radius Radius of circle
+ * @param center Center of the rectangle
+ * @param distance Distance from p1 to the collision point
+ * @param point Position of the collision
+ * @param normal Normal of the collision
+ * @returns True if there was a collision
+ */
 bool moving_circle_to_retangle_collision_check(Vec2 p1, Vec2 p2, float32 radius, Vec2 center, Vec2 size, 
 		float32* distance, Vec2* point, Vec2* normal) 
 {
@@ -75,7 +117,7 @@ bool moving_circle_to_retangle_collision_check(Vec2 p1, Vec2 p2, float32 radius,
 	float32 delta_mag = magnitude(delta);
 	
 	// Model this as a moving point colliding with a rectangle extruded by the radius size.
-	// So the actual collision shape is 4 sides and 4 circles for the corners.
+	// So the actual collision shape is 4 straight sides and 4 circles for the corners.
 	
 	// Left side
 	if (direction.x > 0.0f) {
@@ -145,7 +187,7 @@ bool moving_circle_to_retangle_collision_check(Vec2 p1, Vec2 p2, float32 radius,
 	
 	// Top-left corner
 	if (direction.x > 0.0f || direction.y < 0.0f) {
-		Vec2 corner_pos = (Vec2){center.x - size.x * 0.5f, center.y + size.y * 0.5f};
+		Vec2 corner_pos = {center.x - size.x * 0.5f, center.y + size.y * 0.5f};
 		if (raycast_circle(p1, direction, corner_pos, radius, &test_distance, &test_point, &test_normal) && test_distance < *distance) {
 			*distance = test_distance;
 			*point = test_point;
@@ -155,7 +197,7 @@ bool moving_circle_to_retangle_collision_check(Vec2 p1, Vec2 p2, float32 radius,
 	
 	// Bottom-right corner
 	if (direction.x < 0.0f || direction.y > 0.0f) {
-		Vec2 corner_pos = (Vec2){center.x + size.x * 0.5f, center.y - size.y * 0.5f};
+		Vec2 corner_pos = {center.x + size.x * 0.5f, center.y - size.y * 0.5f};
 		if (raycast_circle(p1, direction, corner_pos, radius, &test_distance, &test_point, &test_normal) && test_distance < *distance) {
 			*distance = test_distance;
 			*point = test_point;

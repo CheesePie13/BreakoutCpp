@@ -5,10 +5,16 @@
 
 struct Vec2 {
 	float32 x, y;
+
+	Vec2() : x(0), y(0) {}
+	Vec2(float32 x, float32 y) : x(x), y(y) {}
 };
 
 struct Vec2Int {
 	int32 x, y;
+
+	Vec2Int() : x(0), y(0) {}
+	Vec2Int(int32 x, int32 y) : x(x), y(y) {}
 };
 
 //
@@ -22,16 +28,18 @@ const Vec2 Vec2_ONE = {1.0f, 1.0f};
 //
 
 inline Vec2 operator+(const Vec2& a, const Vec2& b) {
-	Vec2 result;
-	result.x = a.x + b.x;
-	result.y = a.y + b.y;
+	Vec2 result = {
+		a.x + b.x,
+		a.y + b.y
+	};
 	return result;
 }
 
 inline Vec2 operator-(const Vec2& a, const Vec2& b) {
-	Vec2 result;
-	result.x = a.x - b.x;
-	result.y = a.y - b.y;
+	Vec2 result = {
+		a.x - b.x,
+		a.y - b.y
+	};
 	return result;
 }
 
@@ -46,13 +54,6 @@ inline Vec2 operator*(const float32& s, const Vec2& v) {
 	Vec2 result;
 	result.x = v.x * s;
 	result.y = v.y * s;
-	return result;
-}
-
-inline Vec2 operator/(const float32& s, const Vec2& v) {
-	Vec2 result;
-	result.x = v.x / s;
-	result.y = v.y / s;
 	return result;
 }
 
@@ -85,7 +86,9 @@ inline Vec2 normalize(Vec2 v) {
 	return result;
 }
 
-// Normal must be normalized
+/**
+ * Note: Normal must be a unit vector
+ */
 inline Vec2 reflect(Vec2 v, Vec2 normal) {
 	Vec2 result;
 	result = v - 2.0f * dot(v, normal) * normal;
