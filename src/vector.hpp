@@ -21,25 +21,25 @@ struct Vec2Int {
 // Constants
 //
 
-const Vec2 Vec2_ONE = {1.0f, 1.0f};
+const Vec2 Vec2_ONE = Vec2(1.0f, 1.0f);
 
 //
 // Vec2 Operators
 //
 
 inline Vec2 operator+(const Vec2& a, const Vec2& b) {
-	Vec2 result = {
+	Vec2 result = Vec2(
 		a.x + b.x,
 		a.y + b.y
-	};
+	);
 	return result;
 }
 
 inline Vec2 operator-(const Vec2& a, const Vec2& b) {
-	Vec2 result = {
+	Vec2 result = Vec2(
 		a.x - b.x,
 		a.y - b.y
-	};
+	);
 	return result;
 }
 

@@ -17,9 +17,11 @@ Move your paddle to keep the ball from flying off the bottom of the screen. You 
 - The executable will be created in `bin\win-debug` or `bin\win-release`
 
 # Building for Mac
+
 - Run `mac-build-debug.sh` or `mac-build-release.sh`
 - The executable will be created in `bin/mac-debug` or `bin/mac-release`
 
 # Using Visual Studio Code
-There are tasks setup to build and debug windows and mac builds.  
-(On windows you may need to change the path to your mingw-w64 gdb)
+There are tasks setup to build and debug windows and mac builds.
+- Windows: You may need to change the path to your mingw-w64 gdb in `.vscode/launch.json`
+- Mac: In `.vscode/c_cpp_properties.json` change the "WINDOWS" define to "MACOS"

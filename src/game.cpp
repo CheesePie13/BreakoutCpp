@@ -12,25 +12,25 @@ using namespace Game;
 const float32 PI = 3.14159265;
 
 // Size of the window in world units (Origin is in the center of the window)
-const Vec2 world_size = {16, 9};
+const Vec2 world_size = Vec2(16, 9);
 
 const int     tile_grid_size_x   = 12; // Number of tile columns
 const int     tile_grid_size_y   = 3;  // Number of tile rows
-const Vec2Int tile_grid_size     = {tile_grid_size_x, tile_grid_size_y};
+const Vec2Int tile_grid_size     = Vec2Int(tile_grid_size_x, tile_grid_size_y);
 const int32   tile_count         = tile_grid_size_x * tile_grid_size_y;
 
-const Vec2    tile_size          = {1.0f, 0.5f};  // Size of tile in world units
-const Vec2    tile_grid_offset   = {0.0f, -1.0f}; // Grid offset from the top of the window
+const Vec2    tile_size          = Vec2(1.0f, 0.5f);  // Size of tile in world units
+const Vec2    tile_grid_offset   = Vec2(0.0f, -1.0f); // Grid offset from the top of the window
 
-const float32 paddle_start_pos_x = 0.0f;          // Start x position of the paddle
-const float32 paddle_pos_y       = -4.0f;         // Constant y position of the paddle
-const Vec2    paddle_size        = {2.0f, 0.25f}; // Size of the paddle in world units
-const float32 paddle_speed       = 6.0f;          // Horizontal speed of the paddle in units per second
+const float32 paddle_start_pos_x = 0.0f;              // Start x position of the paddle
+const float32 paddle_pos_y       = -4.0f;             // Constant y position of the paddle
+const Vec2    paddle_size        = Vec2(2.0f, 0.25f); // Size of the paddle in world units
+const float32 paddle_speed       = 6.0f;              // Horizontal speed of the paddle in units per second
 
-const Vec2    ball_start_pos     = {0.0f, 0.0f};  // World start position of the ball
-const float32 ball_radius        = 0.2f;          // Radius of the ball in world units
-const float32 ball_base_speed    = 4.5f;          // Ball speed on level 1
-const float32 ball_level_speed   = 0.5f;          // Speed the ball increases by every level
+const Vec2    ball_start_pos     = Vec2(0.0f, 0.0f);  // World start position of the ball
+const float32 ball_radius        = 0.2f;              // Radius of the ball in world units
+const float32 ball_base_speed    = 4.5f;              // Ball speed on level 1
+const float32 ball_level_speed   = 0.5f;              // Speed the ball increases by every level
 
 // When the ball hits near the edges of the paddle the ball bounces off 
 // with extra rotation, this gives the player a bit of control over where
@@ -211,7 +211,7 @@ Data* Game::init(const Input* input) {
 void Game::update(const Input* input, Data* data) {
 
 	//
-	// Handle start key presses
+	// Handle state logic
 	//
 	if (data->state == PAUSED) {
 		if (input->start_key_pressed && !input->start_key_pressed_prev) {
