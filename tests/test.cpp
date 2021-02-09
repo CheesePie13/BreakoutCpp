@@ -16,6 +16,7 @@ std::string to_string(bool b) {
 	return b ? "true" : "false";
 }
 
+
 void verify(std::string* errors, std::string name, float32 expected, float32 actual) {
 	if (abs(actual - expected) > EPSILON) {
 		*errors += std::string("\t") + name + std::string(" (Expected: ") + std::to_string(expected) 
@@ -36,6 +37,7 @@ void verify(std::string* errors, std::string name, bool expected, bool actual) {
 				+ std::string(", Actual: ") + to_string(actual) + ")\n";
 	}
 }
+
 
 void test(bool* has_failed, std::string name, std::string errors) {
 	if (errors.empty()) {

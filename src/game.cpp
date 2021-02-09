@@ -380,7 +380,9 @@ void Game::update(const Input* input, Data* data) {
 		data->ball_pos = new_ball_pos;
 	}
 
+	//
 	// Check Advance Level
+	//
 	{
 		bool has_health = false;
 		for (int i = 0; i < tile_count; i++) {
@@ -401,7 +403,9 @@ void Game::update(const Input* input, Data* data) {
 		}
 	}
 
+	//
 	// Check Game Over
+	//
 	{
 		if (data->ball_pos.y < -world_size.y * 0.5f) {
 			if (data->lives > 0) {
@@ -417,7 +421,9 @@ void Game::update(const Input* input, Data* data) {
 
 void Game::render(const Input* input, Data* data) {
 
+	//
 	// Update window title
+	//
 	switch (data->state) {
 		case PAUSED:
 			input->update_ui(data->score, data->lives, "Press Spacebar to Play");
